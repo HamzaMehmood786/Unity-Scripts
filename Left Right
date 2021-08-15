@@ -1,0 +1,62 @@
+using HedgehogTeam.EasyTouch;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public float leftRightMax, leftRightMin;
+    [HideInInspector]
+    public bool isDeath = false, isWin = false;
+
+    public Transform box;
+
+    void Start()
+    {
+        
+    }
+    void Update()
+    {
+        
+    }
+
+    void OnEnable()
+    {
+        EasyTouch.On_TouchDown += On_Drag;
+        EasyTouch.On_TouchUp += On_dragEnd;
+    }
+    void OnDisable()
+    {
+        EasyTouch.On_TouchDown -= On_Drag;
+        EasyTouch.On_TouchUp -= On_dragEnd;
+    }
+    void OnDestroy()
+    {
+        EasyTouch.On_TouchDown -= On_dragEnd;
+        EasyTouch.On_TouchUp -= On_Drag;
+    }
+    public void On_Drag(Gesture gesture)
+    {
+        if (!isDeath && !isWin)
+        {
+            if (box.localPosition.x <= leftRightMax && box.localPosition.x >= leftRightMin)
+            {
+                float Xvalue = box.localPosition.x + gesture.deltaPosition.x * 0.02f;
+                if (Xvalue <= leftRightMin)
+                {
+                    Xvalue = leftRightMin;
+                }
+                else if (Xvalue >= leftRightMax)
+                {
+                    Xvalue = leftRightMax;
+                }
+                box.localPosition = new Vector3(Xvalue, box.localPosition.y, box.localPosition.z);
+            }
+        }
+    }
+    public void On_dragEnd(Gesture gesture)
+    {
+
+    }
+
+}
